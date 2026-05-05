@@ -1,0 +1,40 @@
+<div class="register-container">
+    <div class="glass-card register-card">
+        <h2 class="gradient-text" style="margin-bottom: 2rem; text-align: center;">Créer un compte</h2>
+
+        <div *ngIf="errorMessage" class="error-msg">{{ errorMessage }}</div>
+        <div *ngIf="successMessage" class="badge badge-success" style="width: 100%; margin-bottom: 1rem; padding: 1rem; display: block; text-align: center;">
+            {{ successMessage }}
+        </div>
+
+        <form (ngSubmit)="onSubmit()" #registerForm="ngForm">
+            <div class="form-group">
+                <label for="username">Nom d'utilisateur</label>
+                <input type="text" id="username" name="username" class="input-field" [(ngModel)]="userData.username" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" class="input-field" [(ngModel)]="userData.email" required email>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Mot de passe</label>
+                <input type="password" id="password" name="password" class="input-field" [(ngModel)]="userData.password" required minlength="6">
+            </div>
+
+            <div class="form-group">
+                <label for="confirmPassword">Confirmer le mot de passe</label>
+                <input type="password" id="confirmPassword" name="confirmPassword" class="input-field" [(ngModel)]="userData.confirmPassword" required>
+            </div>
+
+            <button type="submit" class="btn-primary" style="width: 100%; justify-content: center; margin-top: 1rem;" [disabled]="!registerForm.valid">
+                <span class="material-icons">person_add</span> S'inscrire
+            </button>
+        </form>
+
+        <div style="margin-top: 2rem; text-align: center; color: var(--text-muted);">
+            Déjà un compte ? <a routerLink="/login" style="color: var(--primary); text-decoration: none; font-weight: 600;">Se connecter</a>
+        </div>
+    </div>
+</div>

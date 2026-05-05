@@ -1,0 +1,23 @@
+<nav class="navbar">
+    <a routerLink="/" class="logo">
+        <span class="material-icons">bolt</span>
+        ElectroYassine
+    </a>
+
+    <div class="nav-links">
+        <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Accueil</a>
+        <a routerLink="/products" routerLinkActive="active">Produits</a>
+        <a *ngIf="authService.isAdmin()" routerLink="/admin/dashboard" routerLinkActive="active">Dashboard Admin</a>
+    </div>
+
+    <div class="user-section">
+        <ng-container *ngIf="authService.currentUser$ | async as user; else loginBtn">
+            <span class="text-muted">{{ user.username }}</span>
+            <button (click)="authService.logout()" class="btn-outline">Déconnexion</button>
+        </ng-container>
+        <ng-template #loginBtn>
+            <a routerLink="/register" class="btn-outline">S'inscrire</a>
+            <a routerLink="/login" class="btn-primary">Connexion</a>
+        </ng-template>
+    </div>
+</nav>

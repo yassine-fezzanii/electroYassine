@@ -1,0 +1,65 @@
+<div class="container" style="padding-top: 3rem;">
+    <header style="margin-bottom: 3rem;">
+        <h1 class="gradient-text">Gestion des Catégories</h1>
+        <p class="text-muted">Ajoutez, modifiez ou supprimez les catégories de produits.</p>
+    </header>
+
+    <div class="grid" style="grid-template-columns: 1fr 350px; align-items: start;">
+        <section class="glass-card table-container">
+            <table class="modern-table">
+                <thead>
+                    <tr>
+                        <th>Icon</th>
+                        <th>Nom</th>
+                        <th>Description</th>
+                        <th style="text-align: right;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let cat of categories">
+                        <td><span class="material-icons">{{ cat.icon }}</span></td>
+                        <td style="font-weight: 600;">{{ cat.name }}</td>
+                        <td class="text-muted" style="font-size: 0.875rem;">{{ cat.description }}</td>
+                        <td style="text-align: right;">
+                            <button (click)="editCategory(cat)" class="material-icons" style="color: var(--primary); background: none; border: none; cursor: pointer;">edit</button>
+                            <button (click)="deleteCategory(cat.id)" class="material-icons" style="color: var(--secondary); background: none; border: none; cursor: pointer; margin-left: 0.5rem;">delete</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section class="glass-card">
+            <h3 style="margin-bottom: 1.5rem;">{{ editingCategory ? 'Modifier' : 'Ajouter' }} une Catégorie</h3>
+            
+            <form (submit)="editingCategory ? updateCategory() : addCategory()">
+                <div class="form-group">
+                    <label>Nom</label>
+                    <input type="text" [(ngModel)]="(editingCategory || newCategory).name" name="name" class="glass-input" style="width: 100%;" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea [(ngModel)]="(editingCategory || newCategory).description" name="description" class="glass-input" style="width: 100%; height: 100px; resize: vertical;"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Icon (Material Icons name)</label>
+                    <div style="display: flex; gap: 0.5rem; align-items: center;">
+                        <input type="text" [(ngModel)]="(editingCategory || newCategory).icon" name="icon" class="glass-input" style="flex: 1;">
+                        <span class="material-icons" style="font-size: 2rem; color: var(--primary);">{{ (editingCategory || newCategory).icon }}</span>
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                    <button type="submit" class="btn-primary" style="flex: 1;">
+                        {{ editingCategory ? 'Enregistrer' : 'Ajouter' }}
+                    </button>
+                    <button *ngIf="editingCategory" type="button" (click)="cancelEdit()" class="btn-outline" style="flex: 1;">
+                        Annuler
+                    </button>
+                </div>
+            </form>
+        </section>
+    </div>
+</div>

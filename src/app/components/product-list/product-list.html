@@ -1,0 +1,44 @@
+<div class="container">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 3rem;">
+        <h1 class="gradient-text">Catalogue Produits</h1>
+        <a *ngIf="authService.isAdmin()" routerLink="/products/new" class="btn-primary">
+            <span class="material-icons">add</span> Nouveau Produit
+        </a>
+    </div>
+
+    <div class="product-grid">
+        <div *ngFor="let p of products" class="glass-card product-card">
+            <img [src]="p.imageUrl || 'https://via.placeholder.com/300x200?text=ElectroYassine'" class="product-img" alt="{{ p.name }}">
+            <div class="product-info">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                    <div>
+                        <h3 style="margin-bottom: 0.25rem;">{{ p.name }}</h3>
+                        <span class="badge badge-primary">{{ p.category?.name }}</span>
+                    </div>
+                    <div class="price">{{ p.price | currency:'EUR' }}</div>
+                </div>
+                
+                <p class="text-muted" style="margin: 1rem 0; font-size: 0.875rem;">{{ p.description }}</p>
+                
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div class="actions" *ngIf="authService.isAdmin()">
+                        <a [routerLink]="['/products/edit', p.id]" class="material-icons" style="color: var(--text-muted); text-decoration: none;">edit</a>
+                        <span (click)="deleteProduct(p.id)" class="material-icons" style="color: var(--secondary); cursor: pointer;">delete</span>
+                    </div>
+                </div>
+
+                <div class="order-actions" *ngIf="!authService.isAdmin() && authService.isLoggedIn()" style="margin-top: 1rem; display: flex; gap: 0.5rem; align-items: center;">
+                    <div class="input-group" style="flex: 1;">
+                        <input type="number" [(ngModel)]="quantities[p.id!]" min="1" [max]="p.stock" class="glass-input" style="padding: 0.5rem; width: 100%;" placeholder="Qté">
+                    </div>
+                    <button (click)="orderProduct(p)" class="btn-primary" [disabled]="p.stock <= 0" style="padding: 0.5rem 1rem;">
+                        {{ p.stock <= 0 ? 'Rupture' : 'Commander' }}
+                    </button>
+                </div>
+                <div *ngIf="!authService.isLoggedIn()" style="margin-top: 1rem;">
+                    <a routerLink="/login" class="btn-primary" style="display: block; text-align: center; padding: 0.5rem;">Se connecter pour commander</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

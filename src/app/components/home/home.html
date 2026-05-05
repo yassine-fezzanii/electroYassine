@@ -1,0 +1,76 @@
+<div class="container">
+    <header class="hero">
+        <h1 class="gradient-text">Électroménager & Tech</h1>
+        <p class="text-muted">La qualité et la performance pour votre maison et votre quotidien.</p>
+    </header>
+
+    <section class="dashboard" *ngIf="authService.isAdmin()">
+        <h2 style="margin-bottom: 2rem;">Tableau de bord</h2>
+        <div class="stats-grid">
+            <div class="glass-card stat-card">
+                <div class="text-muted">Catégories</div>
+                <div class="stat-value">{{ categories.length }}</div>
+            </div>
+            <div class="glass-card stat-card">
+                <div class="text-muted">Produits Total</div>
+                <div class="stat-value">{{ products.length }}</div>
+            </div>
+            <div class="glass-card stat-card">
+                <div class="text-muted">Stock Total</div>
+                <div class="stat-value">{{ totalStock }}</div>
+            </div>
+            <div class="glass-card stat-card">
+                <div class="text-muted">Prix Moyen</div>
+                <div class="stat-value">{{ avgPrice | currency:'EUR' }}</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="featured-products" *ngIf="!authService.isAdmin()">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+            <h2>Nos Produits</h2>
+            <a routerLink="/products" class="btn-outline">Tout voir</a>
+        </div>
+        <div class="product-grid">
+            <div *ngFor="let p of products.slice(0, 4)" class="glass-card product-card">
+                <img [src]="p.imageUrl || 'https://via.placeholder.com/300x200?text=ElectroYassine'" class="product-img"
+                    alt="{{ p.name }}">
+                <div class="product-info">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                        <h3 style="font-size: 1.1rem;">{{ p.name }}</h3>
+                        <div class="price" style="font-size: 1rem;">{{ p.price | currency:'EUR' }}</div>
+                    </div>
+                    <p class="text-muted" style="font-size: 0.8rem; margin: 0.5rem 0;">{{ p.description | slice:0:60
+                        }}...</p>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem;">
+                        <div class="order-actions" *ngIf="authService.isLoggedIn()"
+                            style="display: flex; gap: 0.5rem; align-items: center;">
+                            <input type="number" [(ngModel)]="quantities[p.id!]" min="1" [max]="p.stock"
+                                class="glass-input" style="width: 50px; padding: 0.25rem;" placeholder="Qté">
+                            <button (click)="orderProduct(p)" class="btn-primary" [disabled]="p.stock <= 0"
+                                style="padding: 0.4rem 0.8rem; font-size: 0.8rem;">
+                                Commander
+                            </button>
+                        </div>
+                        <a *ngIf="!authService.isLoggedIn()" routerLink="/login"
+                            class="badge badge-primary">Connectez-vous</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="categories" style="margin-top: 4rem; margin-bottom: 4rem;">
+        <h2 style="margin-bottom: 2rem;">Nos Catégories</h2>
+        <div class="category-grid">
+            <div *ngFor="let cat of categories" class="glass-card category-card">
+                <span class="material-icons category-icon">{{ cat.icon }}</span>
+                <h3>{{ cat.name }}</h3>
+                <p class="text-muted" style="font-size: 0.875rem;">{{ cat.description }}</p>
+                <div class="badge badge-primary" style="margin-top: 1rem;">
+                    {{ cat.products?.length }} produits
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

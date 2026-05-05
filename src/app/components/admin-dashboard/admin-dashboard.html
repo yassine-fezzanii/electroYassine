@@ -1,0 +1,104 @@
+<div class="container" style="padding-top: 3rem;">
+    <header style="margin-bottom: 3rem; display: flex; justify-content: space-between; align-items: center;">
+        <div>
+            <h1 class="gradient-text">Administration</h1>
+            <p class="text-muted">Gérez vos produits et visualisez les commandes clients.</p>
+        </div>
+        <a routerLink="/admin/categories" class="btn-outline">
+            <span class="material-icons">category</span> Gérer Catégories
+        </a>
+    </header>
+    
+    <div class="stats-overview" style="margin-bottom: 3rem;">
+        <div class="grid grid-cols-2">
+            <div class="glass-card chart-container">
+                <h3>Articles commandés par Catégorie</h3>
+                <div style="position: relative; height: 250px; width: 100%;">
+                    <canvas #ordersChart></canvas>
+                </div>
+            </div>
+            <div class="glass-card chart-container">
+                <h3>Stock total par Catégorie</h3>
+                <div style="position: relative; height: 250px; width: 100%;">
+                    <canvas #stockChart></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="admin-grid">
+        <section class="admin-section">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h2>Produits en Stock</h2>
+                <span class="badge badge-primary">{{ products.length }} items</span>
+            </div>
+            <div class="glass-card table-container">
+                <table class="modern-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nom</th>
+                            <th>Prix</th>
+                            <th>Stock</th>
+                            <th>Catégorie</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let p of products">
+                            <td>#{{ p.id }}</td>
+                            <td>{{ p.name }}</td>
+                            <td>{{ p.price | currency:'EUR' }}</td>
+                            <td>
+                                <span [class.text-danger]="p.stock < 5" style="font-weight: 600;">{{ p.stock }}</span>
+                            </td>
+                            <td>{{ p.category?.name }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="admin-section" style="margin-top: 4rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h2>Commandes Récentes</h2>
+                <span class="badge badge-success">{{ orders.length }} commandes</span>
+            </div>
+            <div class="glass-card table-container">
+                <table class="modern-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Client</th>
+                            <th>Produit</th>
+                            <th>Quantité</th>
+                            <th>Total</th>
+                            <th>Date</th>
+                            <th>Statut</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let o of orders">
+                            <td>#{{ o.id }}</td>
+                            <td>
+                                <div style="display: flex; flex-direction: column;">
+                                    <span>{{ o.user?.username }}</span>
+                                    <span class="text-muted" style="font-size: 0.75rem;">{{ o.user?.email }}</span>
+                                </div>
+                            </td>
+                            <td>{{ o.product?.name }}</td>
+                            <td style="text-align: center;">{{ o.quantity }}</td>
+                            <td style="font-weight: 600;">{{ o.totalPrice | currency:'EUR' }}</td>
+                            <td>{{ o.orderDate | date:'short' }}</td>
+                            <td>
+                                <span class="badge badge-success">Validée</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div *ngIf="orders.length === 0" style="padding: 3rem; text-align: center; color: var(--text-muted);">
+                    Aucune commande pour le moment.
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
