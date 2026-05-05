@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "public": "C:\\Users\\MSI\\.gemini\\antigravity\\scratch\\electroYassine\\Frontend\\dist\\Frontend\\browser",
+    "public": "dist/Frontend/browser",
     "ignore": [
       "firebase.json",
       "**/.*",

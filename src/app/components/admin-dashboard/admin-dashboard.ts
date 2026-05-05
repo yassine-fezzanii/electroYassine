@@ -59,8 +59,8 @@ export class AdminDashboardComponent implements OnInit, AfterViewInit {
     this.orders.forEach(order => {
       const catName = order.product?.category?.name || 'Inconnu';
       console.log(`Order ID ${order.id} product: ${order.product?.name}, category: ${catName}`);
-      // Counting number of orders as requested
-      categoryData[catName] = (categoryData[catName] || 0) + 1;
+      // Summing quantity instead of just counting orders
+      categoryData[catName] = (categoryData[catName] || 0) + order.quantity;
     });
 
     const labels = Object.keys(categoryData);
